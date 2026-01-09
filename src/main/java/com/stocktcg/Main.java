@@ -14,6 +14,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         TitleRoot titleRoot = new TitleRoot();
         Scene scene = new Scene(titleRoot.getParent(),800,600);
+        titleRoot.setupTitleScreen(scene);
         stage.setScene(scene);
         stage.setTitle("Stock TCG");
         stage.show(); 
