@@ -1,2 +1,2 @@
-# Final
-This is the final assessment of this subject
+# stockTCG
+This is a game idea for Prog 2
