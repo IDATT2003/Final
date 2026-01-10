@@ -2,7 +2,7 @@ package com.stocktcg.roots;
 
 import javafx.scene.control.Button;
 
-import com.stocktcg.stockview.Graph;
+import com.stocktcg.stockview.StockView;
 
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
@@ -26,9 +26,9 @@ public class GameRoot {
     }
     public void createGameScreen() {
         HBox gameBox = new HBox();
-        Graph stockGraph = new Graph("Demo Stock", 150.0, 30);
-        gameBox.getChildren().add(stockGraph);
-        gameBox.getChildren().add(quitButton());
+        StockView stockView = new StockView();
+        gameBox.getChildren().add(stockView);
+        //gameBox.getChildren().add(quitButton());
         gameBox.setStyle("-fx-background-color: #1e1b29;");
         this.parentRoot = gameBox;    
     }

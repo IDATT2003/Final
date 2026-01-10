@@ -22,7 +22,8 @@ public class Graph extends VBox {
     private Random random;
     private String stockName;
     private double minPrice, maxPrice;
-    private static final int CANDLE_WIDTH = 18;
+    private final int maxCandles;
+    private static final int CANDLE_WIDTH = 8;
     private static final int PADDING = 60;
     
     /**
@@ -60,10 +61,11 @@ public class Graph extends VBox {
         this.stockName = stockName;
         this.random = new Random();
         this.candles = new ArrayList<>();
+        this.maxCandles = numCandles;
         
         // Create canvas
         double width = Screen.getPrimary().getBounds().getWidth() * 0.8;
-        double height = Screen.getPrimary().getBounds().getHeight();
+        double height = Screen.getPrimary().getBounds().getHeight()-20;
         canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
         
@@ -117,6 +119,63 @@ public class Graph extends VBox {
         double padding = (maxPrice - minPrice) * 0.1;
         minPrice -= padding;
         maxPrice += padding;
+    }
+
+    /**
+     * Recalculates min/max prices and padding based on all candles
+     */
+    private void recalcMinMax() {
+        if (candles.isEmpty()) {
+            minPrice = 0;
+            maxPrice = 1;
+            return;
+        }
+        double min = Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
+        for (CandleStick c : candles) {
+            min = Math.min(min, c.low);
+            max = Math.max(max, c.high);
+        }
+        double padding = (max - min) * 0.1;
+        minPrice = min - padding;
+        maxPrice = max + padding;
+    }
+
+    /**
+     * Appends a new random candle continuing from the last close
+     */
+    public void addRandomCandle() {
+        if (candles.isEmpty()) {
+            return;
+        }
+        double open = getLatestClose();
+
+        double random1 = random.nextDouble() * 0.06 - 0.03;  // -3% to +3%
+        double random2 = random.nextDouble() * 0.06 - 0.03;
+
+        double high = open * (1 + Math.max(random1, random2));
+        double low = open * (1 + Math.min(random1, random2));
+
+        double closeChange = (random.nextDouble() - 0.5) * 0.08;  // -4% to +4%
+        double close = open * (1 + closeChange);
+
+        close = Math.max(close, 1.0);
+        high = Math.max(Math.max(high, close), open);
+        low = Math.min(Math.min(low, close), open);
+
+        candles.add(new CandleStick(open, high, low, close));
+        enforceMaxCandles();
+        recalcMinMax();
+        drawChart();
+    }
+
+    /**
+     * Keeps only the most recent maxCandles entries
+     */
+    private void enforceMaxCandles() {
+        while (candles.size() > maxCandles) {
+            candles.remove(0);
+        }
     }
     
     /**
@@ -213,12 +272,8 @@ public class Graph extends VBox {
      */
     public void addCandle(double open, double high, double low, double close) {
         candles.add(new CandleStick(open, high, low, close));
-        
-        // Update min/max
-        minPrice = Math.min(minPrice, low);
-        maxPrice = Math.max(maxPrice, high);
-        
-        // Redraw
+        enforceMaxCandles();
+        recalcMinMax();
         drawChart();
     }
     
