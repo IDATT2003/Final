@@ -20,7 +20,7 @@ public class Graph extends VBox {
     private Random random;
     private String stockName;
     private double minPrice, maxPrice;
-    private static final int CANDLE_WIDTH = 30;
+    private static final int CANDLE_WIDTH = 12;
     private static final int PADDING = 60;
     
     /**
@@ -182,18 +182,20 @@ public class Graph extends VBox {
                            ((candle.close - minPrice) / (maxPrice - minPrice)) * chartHeight;
             
             // Set color based on gain or loss
-            Color color = candle.isGain() ? Color.web("#00ff00") : Color.web("#ff0000");
-            gc.setStroke(color);
-            gc.setFill(color);
+            Color bodyColor = candle.isGain() ? Color.web("#00dd00") : Color.web("#ff4444");
+            Color wickColor = candle.isGain() ? Color.web("#00ff00") : Color.web("#ff0000");
             
             // Draw wick (high-low line)
-            gc.setLineWidth(1);
+            gc.setLineWidth(1.2);
+            gc.setStroke(wickColor);
             gc.strokeLine(x, highY, x, lowY);
             
             // Draw body (open-close rectangle)
             double bodyTop = Math.min(openY, closeY);
             double bodyHeight = Math.abs(closeY - openY);
-            gc.setLineWidth(2);
+            gc.setLineWidth(0.8);
+            gc.setFill(bodyColor);
+            gc.setStroke(wickColor);
             gc.fillRect(x - CANDLE_WIDTH / 2, bodyTop, CANDLE_WIDTH, Math.max(bodyHeight, 2));
             gc.strokeRect(x - CANDLE_WIDTH / 2, bodyTop, CANDLE_WIDTH, Math.max(bodyHeight, 2));
         }
