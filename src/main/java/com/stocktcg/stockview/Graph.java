@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +22,7 @@ public class Graph extends VBox {
     private Random random;
     private String stockName;
     private double minPrice, maxPrice;
-    private static final int CANDLE_WIDTH = 12;
+    private static final int CANDLE_WIDTH = 18;
     private static final int PADDING = 60;
     
     /**
@@ -60,7 +62,9 @@ public class Graph extends VBox {
         this.candles = new ArrayList<>();
         
         // Create canvas
-        canvas = new Canvas(800, 600);
+        double width = Screen.getPrimary().getBounds().getWidth() * 0.8;
+        double height = Screen.getPrimary().getBounds().getHeight();
+        canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
         
         // Generate candlestick data
@@ -181,8 +185,8 @@ public class Graph extends VBox {
                            ((candle.close - minPrice) / (maxPrice - minPrice)) * chartHeight;
             
             // Set color based on gain or loss
-            Color bodyColor = candle.isGain() ? Color.web("#00dd00") : Color.web("#ff4444");
-            Color wickColor = candle.isGain() ? Color.web("#00ff00") : Color.web("#ff0000");
+            Color bodyColor = candle.isGain() ? Color.web("#43973b") : Color.web("#b02d2d");
+            Color wickColor = candle.isGain() ? Color.web("#43973b") : Color.web("#b02d2d");
             
             // Draw wick (high-low line)
             gc.setLineWidth(1.2);

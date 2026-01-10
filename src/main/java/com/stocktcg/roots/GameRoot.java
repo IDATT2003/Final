@@ -29,6 +29,7 @@ public class GameRoot {
         Graph stockGraph = new Graph("Demo Stock", 150.0, 30);
         gameBox.getChildren().add(stockGraph);
         gameBox.getChildren().add(quitButton());
+        gameBox.setStyle("-fx-background-color: #1e1b29;");
         this.parentRoot = gameBox;    
     }
 }
