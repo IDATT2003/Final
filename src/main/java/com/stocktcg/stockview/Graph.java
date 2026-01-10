@@ -70,7 +70,6 @@ public class Graph extends VBox {
         drawChart();
         
         // Style the container
-        this.setStyle("-fx-background-color: #000000; -fx-padding: 10;");
     }
     
     /**
@@ -123,7 +122,7 @@ public class Graph extends VBox {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         
         // Clear background
-        gc.setFill(Color.web("#000000"));
+        gc.setFill(Color.web("#2f2c3a"));
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         
         // Draw axes
@@ -137,7 +136,7 @@ public class Graph extends VBox {
      * Draws the axes and labels
      */
     private void drawAxes(GraphicsContext gc) {
-        gc.setStroke(Color.web("#00ff00"));
+        gc.setStroke(Color.web("#c0bcdb"));
         gc.setLineWidth(2);
         
         // Draw axes
@@ -146,7 +145,7 @@ public class Graph extends VBox {
         gc.strokeLine(PADDING, PADDING, PADDING, canvas.getHeight() - PADDING);  // Y axis
         
         // Draw axis labels
-        gc.setFill(Color.web("#00ff00"));
+        gc.setFill(Color.web("#c0bcdb"));
         gc.setFont(Font.font(12));
         gc.fillText(stockName + " - Candlestick Chart", PADDING + 10, 30);
         
