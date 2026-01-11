@@ -17,6 +17,7 @@ public class Main extends Application {
         titleRoot.setupTitleScreen(scene);
         stage.setScene(scene);
         stage.setTitle("Stock TCG");
+        stage.setFullScreen(true);
         stage.show(); 
     }    
     public static void main(String[] args) {

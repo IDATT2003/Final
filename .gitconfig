@@ -5,6 +5,3 @@ git config --global alias.snap "commit -am"
 
 # Or for staging everything (including new files):
 git config --global alias.all "!git add -A && git commit"   
-
-#pretty log
-git config --global alias.lg "log --oneline --graph --decorate --all"
