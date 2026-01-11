@@ -55,10 +55,10 @@ public class Graph extends VBox {
         this.random = new Random();
         this.candles = new ArrayList<>();
         this.maxCandles = numCandles;
-        this.CANDLE_WIDTH = 4*widthScale;
+        this.CANDLE_WIDTH = 3*widthScale;
         
         // Create canvas
-        double width = Screen.getPrimary().getBounds().getWidth() * 0.5 * widthScale;
+        double width = Screen.getPrimary().getBounds().getWidth() * 0.4 * widthScale;
         double height = Screen.getPrimary().getBounds().getHeight() * 0.5* heightScale;
         canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
@@ -144,8 +144,8 @@ public class Graph extends VBox {
         }
         double open = getLatestClose();
 
-        double random1 = random.nextDouble() * 0.08 - 0.03;  // -3% to +3%
-        double random2 = random.nextDouble() * 0.08 - 0.03;
+        double random1 = random.nextDouble() * 0.06 - 0.03;  // -3% to +3%
+        double random2 = random.nextDouble() * 0.06 - 0.03;
 
         double high = open * (1 + Math.max(random1, random2));
         double low = open * (1 + Math.min(random1, random2));
@@ -204,7 +204,7 @@ public class Graph extends VBox {
         // Draw axis labels
         gc.setFill(Color.web("#c0bcdb"));
         gc.setFont(Font.font(12));
-        gc.fillText(stockName + " - Candlestick Chart", PADDING + 10, 30);
+        gc.fillText(stockName, PADDING + 10, 30);
         
         // Draw price labels on Y axis
         gc.setFont(Font.font(10));

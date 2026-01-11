@@ -25,7 +25,7 @@ public class StockView extends VBox {
     private final Timeline ticker;
 
     private double cash = 100.0;
-    private int shares = 0;
+    private int shares = 10;
 
     public StockView(String stockName) {
         super(10);
@@ -44,15 +44,15 @@ public class StockView extends VBox {
         buyButton.setOnAction(e -> buy());
         sellButton.setOnAction(e -> sell());
 
-        HBox controls = new HBox(10, buyButton, sellButton);
+        VBox controls = new VBox(10, buyButton, sellButton);
         controls.setAlignment(Pos.CENTER);
 
         // Style labels
-        priceLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        cashLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        sharesLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #ffcc00;");
+        priceLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
+        cashLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
+        sharesLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
+        netWorthLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
+        statusLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #ffcc00;");
 
         VBox stats = new VBox(10, priceLabel, cashLabel, sharesLabel, netWorthLabel, statusLabel);
         stats.setAlignment(Pos.TOP_LEFT);
