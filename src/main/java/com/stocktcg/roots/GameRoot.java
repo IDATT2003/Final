@@ -4,20 +4,29 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 
+import com.stocktcg.Portfolio;
 import com.stocktcg.stockview.StockView;
 
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 
 public class GameRoot {
     
     private Parent parentRoot;
+    private Portfolio portfolio;
+    private Label netWorthLabel;
+    private Label cashLabel;
+    
     public GameRoot() {
+        this.portfolio = new Portfolio(100.0);
         createGameScreen();
     }
+    
     public Parent getParent() {
         return this.parentRoot;
     }
+    
     public Button quitButton(){
         Button quitButton = new Button("Quit Game");
         quitButton.setOnAction(e -> {
@@ -26,37 +35,48 @@ public class GameRoot {
         });
         return quitButton;
     }
+    
     public void createGameScreen() {
         VBox gameBox = new VBox();
         HBox topBar = topBar();
         HBox stocksBox = stocksLayout();
         gameBox.getChildren().addAll(topBar, stocksBox);
+        gameBox.setStyle("-fx-background-color: #1e1b29;");
         this.parentRoot = gameBox;    
     }
     
     private HBox topBar(){
-        HBox topBar = new HBox();
+        HBox topBar = new HBox(20);
         Button quitButton = quitButton();
 
-        Label netWorthLabel = new Label("Net Worth: $1000.00");
-        Label casLabel = new Label("Cash: $500.00");
+        netWorthLabel = new Label();
+        cashLabel = new Label();
+        updateTopBar();
+        
         netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        casLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        topBar.getChildren().addAll(quitButton, netWorthLabel, casLabel);
+        cashLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+        topBar.getChildren().addAll(quitButton, cashLabel, netWorthLabel);
         topBar.setStyle("-fx-background-color: #1f193a; -fx-padding: 10;");
+        topBar.setAlignment(Pos.CENTER_LEFT);
         return topBar;
+    }
+    
+    public void updateTopBar() {
+        cashLabel.setText(String.format("Cash: $%.2f", portfolio.getCash()));
+        double netWorth = portfolio.getNetWorth();
+        netWorthLabel.setText(String.format("Net Worth: $%.2f", netWorth));
     }
     
     private HBox stocksLayout(){
         VBox StockBox1 = new VBox();
-        StockView apple = new StockView("AAPL");
-        StockView nvidia = new StockView("NVDA");
+        StockView apple = new StockView("AAPL", portfolio, this::updateTopBar);
+        StockView nvidia = new StockView("NVDA", portfolio, this::updateTopBar);
 
         StockBox1.getChildren().add(apple);
         StockBox1.getChildren().add(nvidia);
         VBox StockBox2 = new VBox();
-        StockView tesla = new StockView("TSLA");
-        StockView amazon = new StockView("AMZN");
+        StockView tesla = new StockView("TSLA", portfolio, this::updateTopBar);
+        StockView amazon = new StockView("AMZN", portfolio, this::updateTopBar);
         StockBox2.getChildren().add(tesla);
         StockBox2.getChildren().add(amazon);
         HBox gameBox = new HBox();
