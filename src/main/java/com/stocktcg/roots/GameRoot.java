@@ -17,9 +17,11 @@ public class GameRoot {
     private Portfolio portfolio;
     private Label netWorthLabel;
     private Label cashLabel;
+    private double previousNetWorth;
     
     public GameRoot() {
-        this.portfolio = new Portfolio(100.0);
+        this.portfolio = new Portfolio(1000.0);
+        this.previousNetWorth = portfolio.getNetWorth();
         createGameScreen();
     }
     
@@ -65,6 +67,16 @@ public class GameRoot {
     public void updateTopBar() {
         cashLabel.setText(String.format("Cash: $%.2f", portfolio.getCash()));
         double netWorth = portfolio.getNetWorth();
+        
+        // Color based on gain/loss
+        if (netWorth > previousNetWorth) {
+            netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #43973b;");  // Green
+        } else if (netWorth < previousNetWorth) {
+            netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #b02d2d;");  // Red
+        } else {
+            netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");    // White
+        }
+        previousNetWorth = netWorth;
         netWorthLabel.setText(String.format("Net Worth: $%.2f", netWorth));
     }
     

@@ -25,6 +25,7 @@ public class Graph extends VBox {
     private final int maxCandles;
     private int CANDLE_WIDTH;
     private static final int PADDING = 60;
+    private static final double UPWARD_DRIFT = 0.001;  // Adjust this to change gain/loss odds.
     
     /**
      * Candlestick data: Open, High, Low, Close
@@ -58,8 +59,8 @@ public class Graph extends VBox {
         this.CANDLE_WIDTH = 3*widthScale;
         
         // Create canvas
-        double width = Screen.getPrimary().getBounds().getWidth() * 0.4 * widthScale;
-        double height = Screen.getPrimary().getBounds().getHeight() * 0.45* heightScale;
+        double width = Screen.getPrimary().getBounds().getWidth() * 0.45 * widthScale;
+        double height = Screen.getPrimary().getBounds().getHeight() * 0.47* heightScale;
         canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
         
@@ -86,14 +87,14 @@ public class Graph extends VBox {
             double open = price;
             
             // Generate random high and low
-            double random1 = random.nextDouble() * 0.09 - 0.03;  // -3% to +3%
-            double random2 = random.nextDouble() * 0.09 - 0.03;
+            double random1 = random.nextDouble() * 0.06 - 0.03;  // -3% to +3%
+            double random2 = random.nextDouble() * 0.06 - 0.03;
             
             double high = open * (1 + Math.max(random1, random2));
             double low = open * (1 + Math.min(random1, random2));
             
             // Generate close price
-            double closeChange = (random.nextDouble() - 0.5) * 0.08;  // -4% to +4%
+            double closeChange = (random.nextDouble() - 0.5) * 0.08 + UPWARD_DRIFT;  // -4% to +4% + upward drift
             double close = open * (1 + closeChange);
             
             // Ensure prices stay positive
@@ -150,7 +151,7 @@ public class Graph extends VBox {
         double high = open * (1 + Math.max(random1, random2));
         double low = open * (1 + Math.min(random1, random2));
 
-        double closeChange = (random.nextDouble() - 0.5) * 0.08;  // -4% to +4%
+        double closeChange = (random.nextDouble() - 0.5) * 0.08 + UPWARD_DRIFT;  // -4% to +4% + upward drift
         double close = open * (1 + closeChange);
 
         close = Math.max(close, 1.0);
@@ -179,7 +180,7 @@ public class Graph extends VBox {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         
         // Clear background
-        gc.setFill(Color.web("#2f2c3a"));
+        gc.setFill(Color.web("#1e1b29"));
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         
         // Draw axes

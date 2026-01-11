@@ -46,7 +46,7 @@ public class StockView extends VBox {
         sellButton.setOnAction(e -> sell());
 
         VBox controls = new VBox(10, buyButton, sellButton);
-        controls.setAlignment(Pos.CENTER);
+        controls.setAlignment(Pos.TOP_LEFT);
 
         // Style labels
         priceLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
@@ -55,13 +55,13 @@ public class StockView extends VBox {
 
         VBox stats = new VBox(10, priceLabel, sharesLabel, statusLabel);
         stats.setAlignment(Pos.TOP_LEFT);
-        stats.setPadding(new Insets(10));
+        stats.setPadding(new Insets(0,0,0,0));
 
         VBox rightPanel = new VBox(20, controls, stats);
         rightPanel.setAlignment(Pos.TOP_CENTER);
-        rightPanel.setPadding(new Insets(20));
+        rightPanel.setPadding(new Insets(50,0,0,0));
         rightPanel.setStyle("-fx-background-color: #1e1b29;");
-        rightPanel.setPrefWidth(250);
+        rightPanel.setPrefWidth(100);
 
         HBox layout = new HBox(graph, rightPanel);
         HBox.setMargin(graph, new Insets(0, 0, 0, 10));
