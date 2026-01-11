@@ -21,6 +21,7 @@ public class StockView extends VBox {
 
     private final Graph graph;
     private final Label priceLabel = new Label();
+    private final Label sharesLabel = new Label();
     private final Label statusLabel = new Label();
     private final Timeline ticker;
     private final Portfolio portfolio;
@@ -49,9 +50,10 @@ public class StockView extends VBox {
 
         // Style labels
         priceLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
+        sharesLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #88ff88;");
         statusLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #ffcc00;");
 
-        VBox stats = new VBox(10, priceLabel, statusLabel);
+        VBox stats = new VBox(10, priceLabel, sharesLabel, statusLabel);
         stats.setAlignment(Pos.TOP_LEFT);
         stats.setPadding(new Insets(10));
 
@@ -119,7 +121,10 @@ public class StockView extends VBox {
 
     private void refreshStats() {
         double price = graph.getLatestClose();
+        int shares = portfolio.getShares(stockSymbol);
         priceLabel.setText("Price: $" + String.format("%.2f", price));
+        sharesLabel.setText("Shares: " + shares);
+        statusLabel.setText("");
     }
 
     /** Stops the ticker (call if leaving the view). */
