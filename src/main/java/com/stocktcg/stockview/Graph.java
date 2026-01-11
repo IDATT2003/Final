@@ -6,6 +6,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,7 @@ public class Graph extends VBox {
     private int CANDLE_WIDTH;
     private static final int PADDING = 60;
     private static final double UPWARD_DRIFT = 0.001;  // Adjust this to change gain/loss odds.
+    private Timeline autoUpdateTicker;
     
     /**
      * Candlestick data: Open, High, Low, Close
@@ -51,12 +55,12 @@ public class Graph extends VBox {
      * @param initialPrice the starting price
      * @param numCandles the number of candlesticks to generate
      */
-    public Graph(String stockName, double initialPrice, int numCandles, int heightScale, int widthScale) {
+    public Graph(String stockName, double initialPrice, int numCandles, double heightScale, double widthScale) {
         this.stockName = stockName;
         this.random = new Random();
         this.candles = new ArrayList<>();
         this.maxCandles = numCandles;
-        this.CANDLE_WIDTH = 3*widthScale;
+        this.CANDLE_WIDTH = 3*(int)widthScale;
         
         // Create canvas
         double width = Screen.getPrimary().getBounds().getWidth() * 0.44 * widthScale;
@@ -286,5 +290,27 @@ public class Graph extends VBox {
      */
     public double getLatestClose() {
         return candles.isEmpty() ? 0.0 : candles.get(candles.size() - 1).close;
+    }
+    
+    /**
+     * Starts auto-updating the graph with new candlesticks every 500ms
+     */
+    public void startAutoUpdate() {
+        if (autoUpdateTicker != null) {
+            return;  // Already running
+        }
+        autoUpdateTicker = new Timeline(new KeyFrame(Duration.millis(500), e -> addRandomCandle()));
+        autoUpdateTicker.setCycleCount(Timeline.INDEFINITE);
+        autoUpdateTicker.play();
+    }
+    
+    /**
+     * Stops auto-updating
+     */
+    public void stopAutoUpdate() {
+        if (autoUpdateTicker != null) {
+            autoUpdateTicker.stop();
+            autoUpdateTicker = null;
+        }
     }
 }
