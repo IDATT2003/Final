@@ -29,6 +29,7 @@ public class GameRoot {
     
     public Button quitButton(){
         Button quitButton = new Button("Quit Game");
+        quitButton.setStyle("-fx-font-size: 14px; -fx-padding: 5px 10px; -fx-background-color: transparent; -fx-text-fill: white; -fx-border-radius: 5px; -fx-border-width: 2px; -fx-border-color: white;");
         quitButton.setOnAction(e -> {
             TitleRoot titleRoot = new TitleRoot();
             RootSwap.swapeRoot(quitButton.getScene(), titleRoot.getParent());
@@ -56,7 +57,7 @@ public class GameRoot {
         netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
         cashLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
         topBar.getChildren().addAll(quitButton, cashLabel, netWorthLabel);
-        topBar.setStyle("-fx-background-color: #1f193a; -fx-padding: 10;");
+        topBar.setStyle("-fx-background-color: #1e1b29; -fx-padding: 10;");
         topBar.setAlignment(Pos.CENTER_LEFT);
         return topBar;
     }

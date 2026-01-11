@@ -59,7 +59,7 @@ public class Graph extends VBox {
         
         // Create canvas
         double width = Screen.getPrimary().getBounds().getWidth() * 0.4 * widthScale;
-        double height = Screen.getPrimary().getBounds().getHeight() * 0.5* heightScale;
+        double height = Screen.getPrimary().getBounds().getHeight() * 0.45* heightScale;
         canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
         
