@@ -1,5 +1,6 @@
 package com.stocktcg.roots;
 
+import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 
 import com.stocktcg.stockview.StockView;
@@ -25,10 +26,12 @@ public class GameRoot {
         return quitButton;
     }
     public void createGameScreen() {
-        HBox gameBox = new HBox();
-        StockView stockView = new StockView();
-        gameBox.getChildren().add(stockView);
-        //gameBox.getChildren().add(quitButton());
+        VBox gameBox = new VBox();
+        StockView apple = new StockView("AAPL");
+        StockView nvidia = new StockView("NVDA");
+
+        gameBox.getChildren().add(apple);
+        gameBox.getChildren().add(nvidia);
         gameBox.setStyle("-fx-background-color: #1e1b29;");
         this.parentRoot = gameBox;    
     }

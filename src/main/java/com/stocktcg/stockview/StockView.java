@@ -27,12 +27,10 @@ public class StockView extends VBox {
     private double cash = 100.0;
     private int shares = 0;
 
-    public StockView() {
+    public StockView(String stockName) {
         super(10);
 
-        double width = Screen.getPrimary().getBounds().getWidth() * 0.4;
-        double height = Screen.getPrimary().getBounds().getHeight()*0.25;
-        this.graph = new Graph("Demo Stock", 100.0, 70, width, height);
+        this.graph = new Graph(stockName, 100.0, 70, 1, 1);
 
         // Controls
         Button buyButton = new Button("Buy");

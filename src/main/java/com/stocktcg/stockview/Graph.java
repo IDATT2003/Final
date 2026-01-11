@@ -23,7 +23,7 @@ public class Graph extends VBox {
     private String stockName;
     private double minPrice, maxPrice;
     private final int maxCandles;
-    private static final int CANDLE_WIDTH = 8;
+    private int CANDLE_WIDTH;
     private static final int PADDING = 60;
     
     /**
@@ -50,13 +50,16 @@ public class Graph extends VBox {
      * @param initialPrice the starting price
      * @param numCandles the number of candlesticks to generate
      */
-    public Graph(String stockName, double initialPrice, int numCandles, double width, double height) {
+    public Graph(String stockName, double initialPrice, int numCandles, int heightScale, int widthScale) {
         this.stockName = stockName;
         this.random = new Random();
         this.candles = new ArrayList<>();
         this.maxCandles = numCandles;
+        this.CANDLE_WIDTH = 4*widthScale;
         
         // Create canvas
+        double width = Screen.getPrimary().getBounds().getWidth() * 0.5 * widthScale;
+        double height = Screen.getPrimary().getBounds().getHeight() * 0.5* heightScale;
         canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
         
