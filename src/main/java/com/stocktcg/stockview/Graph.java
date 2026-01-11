@@ -45,27 +45,18 @@ public class Graph extends VBox {
     }
     
     /**
-     * Creates a new Graph with default settings
-     */
-    public Graph() {
-        this("Stock Price", 100.0, 20);
-    }
-    
-    /**
      * Creates a new Graph with custom settings
      * @param stockName the name of the stock
      * @param initialPrice the starting price
      * @param numCandles the number of candlesticks to generate
      */
-    public Graph(String stockName, double initialPrice, int numCandles) {
+    public Graph(String stockName, double initialPrice, int numCandles, double width, double height) {
         this.stockName = stockName;
         this.random = new Random();
         this.candles = new ArrayList<>();
         this.maxCandles = numCandles;
         
         // Create canvas
-        double width = Screen.getPrimary().getBounds().getWidth() * 0.8;
-        double height = Screen.getPrimary().getBounds().getHeight()-20;
         canvas = new Canvas(width, height);
         this.getChildren().add(canvas);
         
@@ -92,8 +83,8 @@ public class Graph extends VBox {
             double open = price;
             
             // Generate random high and low
-            double random1 = random.nextDouble() * 0.06 - 0.03;  // -3% to +3%
-            double random2 = random.nextDouble() * 0.06 - 0.03;
+            double random1 = random.nextDouble() * 0.09 - 0.03;  // -3% to +3%
+            double random2 = random.nextDouble() * 0.09 - 0.03;
             
             double high = open * (1 + Math.max(random1, random2));
             double low = open * (1 + Math.min(random1, random2));
@@ -150,8 +141,8 @@ public class Graph extends VBox {
         }
         double open = getLatestClose();
 
-        double random1 = random.nextDouble() * 0.06 - 0.03;  // -3% to +3%
-        double random2 = random.nextDouble() * 0.06 - 0.03;
+        double random1 = random.nextDouble() * 0.08 - 0.03;  // -3% to +3%
+        double random2 = random.nextDouble() * 0.08 - 0.03;
 
         double high = open * (1 + Math.max(random1, random2));
         double low = open * (1 + Math.min(random1, random2));

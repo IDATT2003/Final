@@ -1,5 +1,6 @@
 package com.stocktcg.stockview;
 
+import javafx.stage.Screen;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -28,13 +29,20 @@ public class StockView extends VBox {
 
     public StockView() {
         super(10);
-        this.graph = new Graph("Demo Stock", 100.0, 70);
+
+        double width = Screen.getPrimary().getBounds().getWidth() * 0.4;
+        double height = Screen.getPrimary().getBounds().getHeight()*0.25;
+        this.graph = new Graph("Demo Stock", 100.0, 70, width, height);
 
         // Controls
         Button buyButton = new Button("Buy");
         Button sellButton = new Button("Sell");
-        buyButton.setStyle("-fx-font-size: 16px; -fx-padding: 10px 20px;");
-        sellButton.setStyle("-fx-font-size: 16px; -fx-padding: 10px 20px;");
+        // Add this in the constructor
+        this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
+        // Then set style classes on buttons
+        buyButton.getStyleClass().add("buy-button");
+        sellButton.getStyleClass().add("sell-button");
         buyButton.setOnAction(e -> buy());
         sellButton.setOnAction(e -> sell());
 
@@ -59,6 +67,7 @@ public class StockView extends VBox {
         rightPanel.setPrefWidth(250);
 
         HBox layout = new HBox(graph, rightPanel);
+        HBox.setMargin(graph, new Insets(0,0,0,10));
         layout.setAlignment(Pos.CENTER_LEFT);
 
         setPadding(new Insets(0));
