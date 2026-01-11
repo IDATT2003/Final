@@ -3,6 +3,9 @@ package com.stocktcg.roots;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.paint.Color;
 
 import com.stocktcg.Portfolio;
 import com.stocktcg.stockview.StockView;
@@ -15,7 +18,7 @@ public class GameRoot {
     
     private Parent parentRoot;
     private Portfolio portfolio;
-    private Label netWorthLabel;
+    private TextFlow netWorthLabel;
     private Label cashLabel;
     private double previousNetWorth;
     
@@ -52,11 +55,11 @@ public class GameRoot {
         HBox topBar = new HBox(20);
         Button quitButton = quitButton();
 
-        netWorthLabel = new Label();
+        netWorthLabel = new TextFlow();
         cashLabel = new Label();
         updateTopBar();
         
-        netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+        netWorthLabel.setStyle("-fx-font-size: 14px;");
         cashLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
         topBar.getChildren().addAll(quitButton, cashLabel, netWorthLabel);
         topBar.setStyle("-fx-background-color: #1e1b29; -fx-padding: 10;");
@@ -68,16 +71,27 @@ public class GameRoot {
         cashLabel.setText(String.format("Cash: $%.2f", portfolio.getCash()));
         double netWorth = portfolio.getNetWorth();
         
-        // Color based on gain/loss
+        // Create arrow with color, text stays white
+        Text arrow = new Text();
+        arrow.setFont(javafx.scene.text.Font.font(20));
+        
+        Text value = new Text(String.format("Net Worth: $%.2f", netWorth));
+        value.setFont(javafx.scene.text.Font.font(14));
+        value.setFill(Color.WHITE);
+        
         if (netWorth > previousNetWorth) {
-            netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #43973b;");  // Green
+            arrow.setText("↑ ");
+            arrow.setFill(Color.web("#43973b"));  // Green
         } else if (netWorth < previousNetWorth) {
-            netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #b02d2d;");  // Red
+            arrow.setText("↓ ");
+            arrow.setFill(Color.web("#b02d2d"));  // Red
         } else {
-            netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");    // White
+            arrow.setText("");
         }
+        
+        netWorthLabel.getChildren().clear();
+        netWorthLabel.getChildren().addAll(arrow, value);
         previousNetWorth = netWorth;
-        netWorthLabel.setText(String.format("Net Worth: $%.2f", netWorth));
     }
     
     private HBox stocksLayout(){
