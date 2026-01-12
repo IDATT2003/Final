@@ -11,61 +11,60 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import com.stocktcg.Portfolio;
+
 /**
  * StockView wires the Graph with game UI: live price ticker and buy/sell controls.
+ * Uses global Portfolio for cash management.
  */
 public class StockView extends VBox {
 
     private final Graph graph;
     private final Label priceLabel = new Label();
-    private final Label cashLabel = new Label();
     private final Label sharesLabel = new Label();
-    private final Label netWorthLabel = new Label();
     private final Label statusLabel = new Label();
     private final Timeline ticker;
+    private final Portfolio portfolio;
+    private final Runnable onPortfolioChange;
+    private final String stockSymbol;
 
-    private double cash = 100.0;
-    private int shares = 0;
-
-    public StockView(String stockName) {
+    public StockView(String stockName, Portfolio portfolio, Runnable onPortfolioChange) {
         super(10);
-
+        this.portfolio = portfolio;
+        this.onPortfolioChange = onPortfolioChange;
+        this.stockSymbol = stockName;
         this.graph = new Graph(stockName, 100.0, 70, 1, 1);
 
         // Controls
         Button buyButton = new Button("Buy");
         Button sellButton = new Button("Sell");
-        // Add this in the constructor
         this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
-        // Then set style classes on buttons
         buyButton.getStyleClass().add("buy-button");
         sellButton.getStyleClass().add("sell-button");
         buyButton.setOnAction(e -> buy());
         sellButton.setOnAction(e -> sell());
 
-        HBox controls = new HBox(10, buyButton, sellButton);
-        controls.setAlignment(Pos.CENTER);
+        VBox controls = new VBox(10, buyButton, sellButton);
+        controls.setAlignment(Pos.TOP_LEFT);
 
         // Style labels
-        priceLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        cashLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        sharesLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        netWorthLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #ffcc00;");
+        priceLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: white;");
+        sharesLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #88ff88;");
+        statusLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #ffcc00;");
 
-        VBox stats = new VBox(10, priceLabel, cashLabel, sharesLabel, netWorthLabel, statusLabel);
+        VBox stats = new VBox(10, priceLabel, sharesLabel, statusLabel);
         stats.setAlignment(Pos.TOP_LEFT);
-        stats.setPadding(new Insets(10));
+        stats.setPadding(new Insets(0,0,0,0));
 
         VBox rightPanel = new VBox(20, controls, stats);
         rightPanel.setAlignment(Pos.TOP_CENTER);
-        rightPanel.setPadding(new Insets(20));
+        rightPanel.setPadding(new Insets(50,0,0,0));
         rightPanel.setStyle("-fx-background-color: #1e1b29;");
-        rightPanel.setPrefWidth(250);
+        rightPanel.setPrefWidth(100);
 
         HBox layout = new HBox(graph, rightPanel);
-        HBox.setMargin(graph, new Insets(0,0,0,10));
+        HBox.setMargin(graph, new Insets(0, 0, 0, 10));
         layout.setAlignment(Pos.CENTER_LEFT);
 
         setPadding(new Insets(0));
@@ -82,7 +81,10 @@ public class StockView extends VBox {
 
     private void tickPrice() {
         graph.addRandomCandle();
+        double currentPrice = graph.getLatestClose();
+        portfolio.updatePrice(stockSymbol, currentPrice);
         refreshStats();
+        onPortfolioChange.run();
     }
 
     private void buy() {
@@ -91,10 +93,10 @@ public class StockView extends VBox {
             statusLabel.setText("Price unavailable");
             return;
         }
-        if (cash >= price) {
-            cash -= price;
-            shares += 1;
+        if (portfolio.buy(stockSymbol, price)) {
             statusLabel.setText("Bought 1 share at $" + String.format("%.2f", price));
+            portfolio.updatePrice(stockSymbol, price);
+            onPortfolioChange.run();
         } else {
             statusLabel.setText("Not enough cash to buy");
         }
@@ -107,10 +109,10 @@ public class StockView extends VBox {
             statusLabel.setText("Price unavailable");
             return;
         }
-        if (shares > 0) {
-            shares -= 1;
-            cash += price;
+        if (portfolio.sell(stockSymbol, price)) {
             statusLabel.setText("Sold 1 share at $" + String.format("%.2f", price));
+            portfolio.updatePrice(stockSymbol, price);
+            onPortfolioChange.run();
         } else {
             statusLabel.setText("No shares to sell");
         }
@@ -119,11 +121,10 @@ public class StockView extends VBox {
 
     private void refreshStats() {
         double price = graph.getLatestClose();
-        double netWorth = cash + shares * price;
+        int shares = portfolio.getShares(stockSymbol);
         priceLabel.setText("Price: $" + String.format("%.2f", price));
-        cashLabel.setText("Cash: $" + String.format("%.2f", cash));
         sharesLabel.setText("Shares: " + shares);
-        netWorthLabel.setText("Net Worth: $" + String.format("%.2f", netWorth));
+        statusLabel.setText("");
     }
 
     /** Stops the ticker (call if leaving the view). */
