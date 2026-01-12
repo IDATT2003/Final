@@ -1,0 +1,31 @@
+.buy-button {
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-border-width: 2px;
+    -fx-border-color: #43973b;
+    -fx-text-fill: #43973b;
+    -fx-background-radius: 5px;
+}
+
+.buy-button:hover {
+    -fx-background-color: #43973b;
+    -fx-text-fill: white;
+}
+
+.sell-button {
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-border-width: 2px;
+    -fx-border-color: #b02d2d;
+    -fx-text-fill: #b02d2d;
+    -fx-background-radius: 5px;
+}
+
+.sell-button:hover {
+    -fx-background-color: #b02d2d;
+    -fx-text-fill: white;
+}
